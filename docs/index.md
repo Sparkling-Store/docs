@@ -6,8 +6,10 @@
 ## 反馈与修正
 ## 开源与使用
 ## 常见问题
-### 用户身份认证（SESSION）更新
-粼光默认不会对已登录用户做退出处理，除非您手动退出登录，无论登录多久都不会在浏览器清除身份信息。所以在进行必要需进行SESSION更新。详见：[[粼光开放平台#更新用户登录态（SESSION）]]
+### 更新应用的逻辑和前端处理
+由于POST传入参数与新增应用完全相同，所以推荐前端按照：调用 [[#搜索应用数据]]->使用form表单控件默认值功能展示->用户对需要更新的值进行修改->调用[[#更新应用]]来进行应用更新。应用更新的逻辑是在数据库中新增一条应用，通过包名与之前上传的应用关联，通过`AppInerVersion`值自增来判断更新，此值无需也不能自行填写或修改。请注意，若数据库中未存在包名相同的应用或者包名相同的应用未通过审核，将无法调用此接口进行更新，此情况返回值为-4。
+### 用户身份认证更新
+粼光默认不会对已登录用户做退出处理，除非您手动退出登录，无论登录多久都不会在浏览器清除身份信息。所以在进行必要需进行SESSION更新。详见：[[#更新用户登录态]]
 # 数据库数据说明
 ### `app_data`表
 此表是粼光所包含的所有应用数据
@@ -172,7 +174,7 @@ Array
 )
 ```
 
-### 查询应用数据
+### 搜索应用数据
 #### 描述
 通过关键字`key`、搜索方向`type`来在指定方向搜索应用，返回搜索到应用的全部信息（请注意：该API可能在未来会修改为返回搜索到应用的部分信息，比如：AppID、AppName等，而并非全部，请注意规避）。
 #### 调用地址
@@ -275,7 +277,7 @@ api/api_addApp.php
 | message | string | 对应错误码的解释 |
 | data | array | 空 |
 #### 调用示例
-以下是一个前端页面像后端请求登录的参考示例，传递参数请使用字典转换json格式传递。
+以下是一个前端页面像后端请求新增应用的参考示例，传递参数请使用字典转换json格式传递。
 ```javascript
 <script>
   var this_app_data = {
@@ -294,6 +296,76 @@ api/api_addApp.php
   var data_post = JSON.stringify(this_app_data);
   // fetch请求
   var url = "../api/api_addApp.php";
+  fetch(url, {
+    method: "POST",
+    body: data_post,
+  })
+    .then(response => response.json())
+    .then(data => {
+      //console.log(data);
+      if (data.code !== 1) {
+        alert(data.message);
+        console.log(data);
+        // location.reload();
+      } else {
+        alert('ok');
+      }
+    })
+    .catch(error => {
+      console.log("error: ", error);
+    })
+</script>
+```
+### 更新应用
+#### 描述
+在认证开发者或管理员身份下可用，对数据库已有并且审核通过应用的应用进行更新。认证开发者上传后将不会直接在列表页面显示，需等待管理员审核后显示，管理员身份更新的应用将会直接显示。
+#### 调用地址
+```
+api/api_updateApp.php
+```
+#### 参数传递
+| 传入参数                       | 传入方式 | 是否必须 | 数据类型         | 描述                                   |
+| -------------------------- | ---- | ---- | ------------ | ------------------------------------ |
+| AppName                    | POST | 是    | string(json) | 应用名称                                 |
+| AppDownloadUrl             | POST | 是    | string(json) | 应用下载地址                               |
+| AppVersion                 | POST | 是    | string(json) | 应用当前版本名                              |
+| AppNewVersion              | POST | 是    | string(json) | 应用最新版本名                              |
+| AppOneSentenceIntroduction | POST | 是    | string(json) | 应用一句话介绍（Slogan）                      |
+| AppIntroduction            | POST | 是    | string(json) | 应用介绍                                 |
+| AppLogoUrl                 | POST | 是    | string(json) | 应用Logo图片                             |
+| AppIntroductionPictureUrl  | POST | 是    | string(json) | 应用介绍图片                               |
+| AppUpdateIntroduction      | POST | 否    | string(json) | 应用新版本更新介绍                            |
+| AppDeveloper               | POST | 否    | string(json) | 应用开发者名称                              |
+| AppDeveloperUrl            | POST | 否    | string(json) | 应用开发者主页链接                            |
+| AppPackageName             | POST | 是    | string(json) | 应用包名（应用唯一身份标识）                       |
+| AppType                    | POST | 否    | string(json) | 应用分类                                 |
+| format                     | GET  | 否    | string       | 可填array使返回数据为array格式，未填写则返回数据为json格式 |
+#### 返回参数
+| 返回参数 | 数据类型 | 描述 |
+| ---- | ---- | ---- |
+| code | int | 获取成功为1，不成功为非1 |
+| message | string | 对应错误码的解释 |
+| data | array | 空 |
+#### 调用示例
+由于POST传入参数与新增应用完全相同，所以推荐前端按照：调用 [[#搜索应用数据]]->使用form表单控件默认值功能展示->用户对需要更新的值进行修改->调用[[#更新应用]]来进行应用更新。应用更新的逻辑是在数据库中新增一条应用，通过包名与之前上传的应用关联，通过`AppInerVersion`值自增来判断更新，此值无需也不能自行填写或修改。请注意，若数据库中未存在包名相同的应用或者包名相同的应用未通过审核，将无法调用此接口进行更新，此情况返回值为-4。以下是一个前端页面像后端请求更新的参考示例，传递参数请使用字典转换json格式传递。
+```javascript
+<script>
+  var this_app_data = {
+    AppName: '测试应用5(NEW)',
+    AppDownloadUrl: 'https://ceshi.com/test.apk',
+    AppVersion: '3.0.0',
+    AppNewVersion: '3.0.0',
+    AppOneSentenceIntroduction: '测试应用5的一句话介绍',
+    AppIntroduction: '测试应用5的详细介绍',
+    AppLogoUrl: 'https://ceshi.com/test.png',
+    AppIntroductionPictureUrl: 'https://ceshi.com/test.png',
+    AppUpdateIntroduction: '测试应用5的更新介绍',
+    AppPackageName: 'com.test5.test',
+    AppType: "TSET"
+  };
+  var data_post = JSON.stringify(this_app_data);
+  // fetch请求
+  var url = "../api/api_updateApp.php";
   fetch(url, {
     method: "POST",
     body: data_post,
@@ -450,7 +522,7 @@ api/api_userLogOut.php
 | code | int | 获取成功为1，不成功为非1 |
 | message | string | 对应错误码的解释 |
 | data | array | 空 |
-### 更新用户登录态（SESSION）
+### 更新用户登录态
 #### 描述
 更新用户身份认证SESSION
 #### 调用地址
