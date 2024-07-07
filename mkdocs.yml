@@ -6,7 +6,10 @@ theme:
   language: zh
   features:
     - navigation.instant
+    - toc.integrate
     - content.code.copy
+    - navigation.top
+    - navigation.instant.progress
   palette:
 
     # Palette toggle for light mode
