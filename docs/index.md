@@ -132,6 +132,7 @@ api/api_getAppData_AppId.php
 | ---- | ---- | ---- | ---- | ---- |
 | AppId | GET | 是 | int | 应用在数据库中的序列标识 |
 | format | GET | 否 | string | 可填array使返回数据为array格式，未填写则返回数据为json格式 |
+
 #### 返回参数
 | 返回参数 | 数据类型 | 描述 |
 | ---- | ---- | ---- |
@@ -187,12 +188,14 @@ api/api_searchApp.php
 | key | GET | 是 | string | 关键词，支持模糊包含关系的模糊搜索 |
 | type | GET | 是 | string | 搜索方向（比如：应用名等）需要在下面数组中选择一项查找。array("AppId","AppName","AppDownloadUrl","AppVersion","AppNewVersion","AppOneSentenceIntroduction","AppIntroduction","AppLogoUrl","AppIntroductionPictureUrl","AppUpdateIntroduction","AppInerVersion","AppUpUserId","AppUniqueId","AppType") |
 | format | GET | 否 | string | 可填array使返回数据为array格式，未填写则返回数据为json格式 |
+
 #### 返回参数
 | 返回参数 | 数据类型 | 描述 |
 | ---- | ---- | ---- |
 | code | int | 获取成功为1，不成功为非1 |
 | message | string | 对应错误码的解释 |
 | data | array | 获取到应用的信息 |
+
 #### 调用示例
 
 **构造链接：** 
@@ -270,12 +273,14 @@ api/api_addApp.php
 | AppPackageName             | POST | 是    | string(json) | 应用包名（应用唯一身份标识）                       |
 | AppType                    | POST | 否    | string(json) | 应用分类                                 |
 | format                     | GET  | 否    | string       | 可填array使返回数据为array格式，未填写则返回数据为json格式 |
+
 #### 返回参数
 | 返回参数 | 数据类型 | 描述 |
 | ---- | ---- | ---- |
 | code | int | 获取成功为1，不成功为非1 |
 | message | string | 对应错误码的解释 |
 | data | array | 空 |
+
 #### 调用示例
 以下是一个前端页面像后端请求新增应用的参考示例，传递参数请使用字典转换json格式传递。
 ```javascript
@@ -340,12 +345,14 @@ api/api_updateApp.php
 | AppPackageName             | POST | 是    | string(json) | 应用包名（应用唯一身份标识）                       |
 | AppType                    | POST | 否    | string(json) | 应用分类                                 |
 | format                     | GET  | 否    | string       | 可填array使返回数据为array格式，未填写则返回数据为json格式 |
+
 #### 返回参数
 | 返回参数 | 数据类型 | 描述 |
 | ---- | ---- | ---- |
 | code | int | 获取成功为1，不成功为非1 |
 | message | string | 对应错误码的解释 |
 | data | array | 空 |
+
 #### 调用示例
 由于POST传入参数与新增应用完全相同，所以推荐前端按照：调用 [[#搜索应用数据]]->使用form表单控件默认值功能展示->用户对需要更新的值进行修改->调用[[#更新应用]]来进行应用更新。应用更新的逻辑是在数据库中新增一条应用，通过包名与之前上传的应用关联，通过`AppInerVersion`值自增来判断更新，此值无需也不能自行填写或修改。请注意，若数据库中未存在包名相同的应用或者包名相同的应用未通过审核，将无法调用此接口进行更新，此情况返回值为-4。以下是一个前端页面像后端请求更新的参考示例，传递参数请使用字典转换json格式传递。
 ```javascript
@@ -402,12 +409,14 @@ api/api_userSignIn.php
 | qq | POST | 是 | string(FormData) | 不允许与数据库已存在账户重复 |
 | password | POST | 是 | string(FormData) | 英文大写、英文小写、标点、数字任选2 |
 | format | GET | 否 | string | 可填array使返回数据为array格式，未填写则返回数据为json格式 |
+
 #### 返回参数
 | 返回参数 | 数据类型 | 描述 |
 | ---- | ---- | ---- |
 | code | int | 获取成功为1，不成功为非1 |
 | message | string | 对应错误码的解释 |
 | data | array | 空 |
+
 #### 调用示例
 以下是一个前端页面像后端请求注册的参考示例，传递参数请使用form表单组件格式传递。
 ```html
@@ -462,12 +471,14 @@ api/api_userLogIn.php
 | qq | POST | 是 | string(FormData) |  |
 | password | POST | 是 | string(FormData) | 英文大写、英文小写、标点、数字任选2 |
 | format | GET | 否 | string | 可填array使返回数据为array格式，未填写则返回数据为json格式 |
+
 #### 返回参数
 | 返回参数 | 数据类型 | 描述 |
 | ---- | ---- | ---- |
 | code | int | 获取成功为1，不成功为非1 |
 | message | string | 对应错误码的解释 |
 | data | array | 空 |
+
 #### 调用示例
 以下是一个前端页面像后端请求登录的参考示例，传递参数请使用form表单组件格式传递。
 ```html
@@ -516,12 +527,14 @@ api/api_userLogOut.php
 | 传入参数 | 传入方式 | 是否必须 | 数据类型 | 描述 |
 | ---- | ---- | ---- | ---- | ---- |
 | format | POST | 否 | string | 可填array使返回数据为array格式，未填写则返回数据为json格式 |
+
 #### 返回参数
 | 返回参数 | 数据类型 | 描述 |
 | ---- | ---- | ---- |
 | code | int | 获取成功为1，不成功为非1 |
 | message | string | 对应错误码的解释 |
 | data | array | 空 |
+
 ### 更新用户登录态
 #### 描述
 更新用户身份认证SESSION
@@ -533,12 +546,14 @@ api/api_updateSession.php
 | 传入参数 | 传入方式 | 是否必须 | 数据类型 | 描述 |
 | ---- | ---- | ---- | ---- | ---- |
 | format | POST | 否 | string | 可填array使返回数据为array格式，未填写则返回数据为json格式 |
+
 #### 返回参数
 | 返回参数 | 数据类型 | 描述 |
 | ---- | ---- | ---- |
 | code | int | 获取成功为1，不成功为非1 |
 | message | string | 对应错误码的解释 |
 | data | array | 空 |
+
 
 ## 工具类
 
