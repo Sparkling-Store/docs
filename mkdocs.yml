@@ -1,8 +1,8 @@
-site_name: 粼光商店官方文档
+site_name: 
 theme:
   name: material
-  logo: https://p.sda1.dev/6/77a5aa544fa469528a39c8a82172b6fc/IMG_20220718_150816.png
-  favicon: https://p.sda1.dev/6/77a5aa544fa469528a39c8a82172b6fc/IMG_20220718_150816.png
+  logo: https://lgboxs.com/icons/safari-pinned-tab.svg
+  favicon: https://lgboxs.com/icons/safari-pinned-tab.svg
   language: zh
   features:
     - navigation.instant
@@ -23,4 +23,4 @@ theme:
         name: Switch to system preference
 extra:
   generator: false
-repo_url: https://github.com/Sparkling-Store/docs
+repo_url: https://github.com/SparklingSt/docs
